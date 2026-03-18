@@ -1,5 +1,7 @@
 import unittest
+from unittest.mock import patch
 
+import main
 from main import (
     OCRLine,
     _average_confidence,
@@ -10,6 +12,10 @@ from main import (
 
 
 class OCRParsingTests(unittest.TestCase):
+    @staticmethod
+    def _raise_import_error(_pages: object) -> None:
+        raise ImportError("missing")
+
     def test_average_confidence_ignores_none(self) -> None:
         lines = [
             OCRLine(page=0, text="a", confidence=0.8),
@@ -58,6 +64,24 @@ class OCRParsingTests(unittest.TestCase):
             [(line.page, line.text, line.confidence) for line in parsed],
             [(2, "line 1", 0.95), (2, "line 2", 0.75)],
         )
+
+    def test_run_ocr_reports_install_hint_on_import_error(self) -> None:
+        with (
+            patch("main.os.path.exists", return_value=True),
+            patch("main._open_tiff_pages", return_value=["fake-page"]),
+            patch.dict(
+                main.ENGINE_RUNNERS,
+                {"tesseract": self._raise_import_error},
+                clear=False,
+            ),
+        ):
+            payload = main.run_ocr("/tmp/input.tiff", ["tesseract"])
+        result = payload["engines"]["tesseract"]
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(result["engine"], "tesseract")
+        self.assertIn("Install with", result["hint"])
+        self.assertIn("pip install pytesseract", result["hint"])
+        self.assertIn("system binary", result["hint"])
 
 
 if __name__ == "__main__":

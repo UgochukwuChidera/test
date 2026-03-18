@@ -11,6 +11,7 @@ Supports optional OCR engines when installed:
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import os
 from dataclasses import dataclass, asdict
@@ -124,11 +125,9 @@ def _run_tesseract(pages: list[Any]) -> dict[str, Any]:
 
 
 def _run_paddleocr(pages: list[Any]) -> dict[str, Any]:
-    from paddleocr import PaddleOCR
-
     import numpy as np
 
-    ocr = PaddleOCR(use_angle_cls=True, lang="en")
+    ocr = _get_paddleocr_reader()
     lines: list[OCRLine] = []
     for i, page in enumerate(pages):
         result = ocr.ocr(np.array(page), cls=True)
@@ -142,11 +141,9 @@ def _run_paddleocr(pages: list[Any]) -> dict[str, Any]:
 
 
 def _run_easyocr(pages: list[Any]) -> dict[str, Any]:
-    from easyocr import Reader
-
     import numpy as np
 
-    reader = Reader(["en"], gpu=False)
+    reader = _get_easyocr_reader()
     lines: list[OCRLine] = []
     for i, page in enumerate(pages):
         result = reader.readtext(np.array(page))
@@ -161,11 +158,8 @@ def _run_easyocr(pages: list[Any]) -> dict[str, Any]:
 
 def _run_trocr(pages: list[Any]) -> dict[str, Any]:
     import torch
-    from transformers import TrOCRProcessor, VisionEncoderDecoderModel
 
-    model_name = "microsoft/trocr-base-printed"
-    processor = TrOCRProcessor.from_pretrained(model_name)
-    model = VisionEncoderDecoderModel.from_pretrained(model_name)
+    processor, model = _get_trocr_processor_and_model()
     model.eval()
 
     lines: list[OCRLine] = []
@@ -195,6 +189,30 @@ ENGINE_RUNNERS = {
 }
 
 
+@functools.lru_cache(maxsize=1)
+def _get_paddleocr_reader() -> Any:
+    from paddleocr import PaddleOCR
+
+    return PaddleOCR(use_angle_cls=True, lang="en")
+
+
+@functools.lru_cache(maxsize=1)
+def _get_easyocr_reader() -> Any:
+    from easyocr import Reader
+
+    return Reader(["en"], gpu=False)
+
+
+@functools.lru_cache(maxsize=1)
+def _get_trocr_processor_and_model() -> tuple[Any, Any]:
+    from transformers import TrOCRProcessor, VisionEncoderDecoderModel
+
+    model_name = "microsoft/trocr-base-printed"
+    processor = TrOCRProcessor.from_pretrained(model_name)
+    model = VisionEncoderDecoderModel.from_pretrained(model_name)
+    return processor, model
+
+
 def run_ocr(path: str, engines: list[str]) -> dict[str, Any]:
     if not os.path.exists(path):
         raise FileNotFoundError(f"File not found: {path}")
@@ -207,9 +225,25 @@ def run_ocr(path: str, engines: list[str]) -> dict[str, Any]:
         runner = ENGINE_RUNNERS[engine]
         try:
             results[engine] = runner(pages)
-        except Exception as exc:  # noqa: BLE001 - this is a user-facing integration surface.
+        except ImportError as exc:
+            install_hints = {
+                "tesseract": "pip install pytesseract (and install the tesseract system binary)",
+                "paddleocr": "pip install paddleocr",
+                "easyocr": "pip install easyocr",
+                "trocr": "pip install transformers torch",
+            }
             results[engine] = {
                 "status": "error",
+                "engine": engine,
+                "error": f"{type(exc).__name__}: {exc}",
+                "hint": f"Engine not available. Install with: {install_hints[engine]}",
+            }
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as exc:
+            results[engine] = {
+                "status": "error",
+                "engine": engine,
                 "error": f"{type(exc).__name__}: {exc}",
             }
 
@@ -252,7 +286,9 @@ def main() -> None:
             print(f"Saved OCR report to {args.output}")
         else:
             print(output)
-    except Exception as exc:  # noqa: BLE001 - surface friendly errors in CLI mode.
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except Exception as exc:
         error_payload = {
             "status": "error",
             "error": f"{type(exc).__name__}: {exc}",
