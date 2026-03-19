@@ -54,16 +54,59 @@ def _parse_tesseract_data(page_index: int, data: dict[str, list[str]]) -> list[O
     lines: list[OCRLine] = []
     texts = data.get("text", [])
     confidences = data.get("conf", [])
+
+    block_nums = data.get("block_num", [])
+    par_nums = data.get("par_num", [])
+    line_nums = data.get("line_num", [])
+    has_line_metadata = (
+        len(block_nums) == len(texts)
+        and len(par_nums) == len(texts)
+        and len(line_nums) == len(texts)
+    )
+
+    if not has_line_metadata:
+        for idx, text in enumerate(texts):
+            clean = _clean_text(text)
+            if not clean:
+                continue
+            raw_conf = confidences[idx] if idx < len(confidences) else None
+            try:
+                conf = float(raw_conf) if raw_conf not in (None, "", "-1") else None
+            except (TypeError, ValueError):
+                conf = None
+            lines.append(OCRLine(page=page_index, text=clean, confidence=conf))
+        return lines
+
+    grouped: dict[tuple[int, int, int], dict[str, Any]] = {}
     for idx, text in enumerate(texts):
         clean = _clean_text(text)
         if not clean:
             continue
+
         raw_conf = confidences[idx] if idx < len(confidences) else None
         try:
             conf = float(raw_conf) if raw_conf not in (None, "", "-1") else None
         except (TypeError, ValueError):
             conf = None
-        lines.append(OCRLine(page=page_index, text=clean, confidence=conf))
+
+        key = (int(block_nums[idx]), int(par_nums[idx]), int(line_nums[idx]))
+        bucket = grouped.setdefault(
+            key,
+            {"index": idx, "parts": [], "confidences": []},
+        )
+        bucket["parts"].append(clean)
+        if conf is not None:
+            bucket["confidences"].append(conf)
+
+    for payload in sorted(grouped.values(), key=lambda item: item["index"]):
+        line_text = " ".join(payload["parts"]).strip()
+        if not line_text:
+            continue
+        conf_values = payload["confidences"]
+        line_conf = (
+            round(sum(conf_values) / len(conf_values), 4) if conf_values else None
+        )
+        lines.append(OCRLine(page=page_index, text=line_text, confidence=line_conf))
     return lines
 
 

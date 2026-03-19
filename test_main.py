@@ -37,6 +37,22 @@ class OCRParsingTests(unittest.TestCase):
             [(1, "hello", 84.2), (1, "world", 90.0)],
         )
 
+    def test_parse_tesseract_data_groups_words_into_lines_when_metadata_present(self) -> None:
+        parsed = _parse_tesseract_data(
+            0,
+            {
+                "text": ["MEDICAL", "SCREENING", "", "AND", "DECLARATION"],
+                "conf": ["93", "95", "-1", "95", "96"],
+                "block_num": [1, 1, 1, 1, 1],
+                "par_num": [1, 1, 1, 2, 2],
+                "line_num": [1, 1, 1, 1, 1],
+            },
+        )
+        self.assertEqual(
+            [(line.page, line.text, line.confidence) for line in parsed],
+            [(0, "MEDICAL SCREENING", 94.0), (0, "AND DECLARATION", 95.5)],
+        )
+
     def test_parse_paddle_result_extracts_text_and_confidence(self) -> None:
         parsed = _parse_paddle_result(
             0,
