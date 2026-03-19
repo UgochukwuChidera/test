@@ -28,6 +28,8 @@ python -m pip install transformers torch
 ```
 
 > For Tesseract, you also need the system Tesseract binary installed on your machine.
+> For TrOCR first run, model files are downloaded from Hugging Face. If offline, set
+> `TROCR_MODEL` to a local model directory that contains the processor/model files.
 
 ## Usage
 

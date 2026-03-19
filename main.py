@@ -456,7 +456,8 @@ def _run_easyocr(pages: list[Any]) -> dict[str, Any]:
 def _run_trocr(pages: list[Any]) -> dict[str, Any]:
     import torch
 
-    processor, model = _get_trocr_processor_and_model()
+    model_name = os.environ.get("TROCR_MODEL", "microsoft/trocr-base-printed")
+    processor, model = _get_trocr_processor_and_model(model_name)
     model.eval()
 
     lines: list[OCRLine] = []
@@ -498,10 +499,9 @@ def _get_easyocr_reader() -> Any:
 
 
 @functools.lru_cache(maxsize=1)
-def _get_trocr_processor_and_model() -> tuple[Any, Any]:
+def _get_trocr_processor_and_model(model_name: str) -> tuple[Any, Any]:
     from transformers import TrOCRProcessor, VisionEncoderDecoderModel
 
-    model_name = "microsoft/trocr-base-printed"
     processor = TrOCRProcessor.from_pretrained(model_name)
     model = VisionEncoderDecoderModel.from_pretrained(model_name)
     return processor, model
@@ -531,6 +531,19 @@ def run_ocr(path: str, engines: list[str], *, include_ensemble: bool = False) ->
                 "engine": engine,
                 "error": f"{type(exc).__name__}: {exc}",
                 "hint": f"Engine not available. Install with: {install_hints[engine]}",
+            }
+        except OSError as exc:
+            hint: str | None = None
+            if engine == "trocr":
+                hint = (
+                    "TrOCR model files unavailable. Allow model download or set TROCR_MODEL "
+                    "to a local HuggingFace model directory."
+                )
+            results[engine] = {
+                "status": "error",
+                "engine": engine,
+                "error": f"{type(exc).__name__}: {exc}",
+                **({"hint": hint} if hint else {}),
             }
         except (KeyboardInterrupt, SystemExit):
             raise

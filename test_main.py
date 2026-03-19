@@ -258,6 +258,26 @@ class OCRParsingTests(unittest.TestCase):
         self.assertIn("pip install pytesseract", result["hint"])
         self.assertIn("system binary", result["hint"])
 
+    def test_run_ocr_reports_trocr_oserror_with_hint(self) -> None:
+        def _raise_os_error(_pages: object) -> None:
+            raise OSError("model unavailable")
+
+        with (
+            patch("main.os.path.exists", return_value=True),
+            patch("main._open_tiff_pages", return_value=["fake-page"]),
+            patch.dict(
+                main.ENGINE_RUNNERS,
+                {"trocr": _raise_os_error},
+                clear=False,
+            ),
+        ):
+            payload = main.run_ocr("/tmp/input.tiff", ["trocr"])
+        result = payload["engines"]["trocr"]
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(result["engine"], "trocr")
+        self.assertIn("model unavailable", result["error"])
+        self.assertIn("TROCR_MODEL", result["hint"])
+
 
 if __name__ == "__main__":
     unittest.main()
