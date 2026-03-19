@@ -21,7 +21,10 @@ from typing import Any
 
 
 SUPPORTED_ENGINES = ("tesseract", "paddleocr", "easyocr", "trocr")
-_FIELD_LABEL_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9 /()'&\-.]{0,80})\s*:\s*(.*)$")
+_MAX_FIELD_LABEL_LENGTH = 80
+_FIELD_LABEL_RE = re.compile(
+    rf"^\s*([A-Za-z][A-Za-z0-9 /()'&\-.]{{0,{_MAX_FIELD_LABEL_LENGTH}}})\s*:\s*(.*)$"
+)
 
 
 @dataclass
@@ -177,7 +180,7 @@ def _build_coherent_output(lines: list[OCRLine]) -> tuple[list[str], dict[str, s
         normalized = " ".join(pending_field_value.split())
         fields[pending_field_label] = normalized
         coherent_lines.append(
-            f"{pending_field_label}: {normalized}" if normalized else f"{pending_field_label}:"
+            f"{pending_field_label}:" + (f" {normalized}" if normalized else "")
         )
         pending_field_label = None
         pending_field_value = ""
