@@ -1,0 +1,1016 @@
+{
+  "file": "/workspaces/test/combo1_individual/page_005.tif",
+  "page_count": 1,
+  "engines": {
+    "tesseract": {
+      "status": "ok",
+      "line_count": 139,
+      "average_confidence": 76.3597,
+      "lines": [
+        {
+          "page": 0,
+          "text": "~",
+          "confidence": 67.0
+        },
+        {
+          "page": 0,
+          "text": "MEDICAL",
+          "confidence": 93.0
+        },
+        {
+          "page": 0,
+          "text": "SCREENING",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "AND",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "DECLARATION",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "FORM",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Please",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "complete",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "all",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "sections",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "in",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "BLOCK",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "LETTERS",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "and",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "tick",
+          "confidence": 89.0
+        },
+        {
+          "page": 0,
+          "text": "(V/)",
+          "confidence": 23.0
+        },
+        {
+          "page": 0,
+          "text": "where",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "applicable.",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Participation",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "is",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "voluntary",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "and",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "responses",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "will",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "be",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "treated",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "as",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "confidential",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "and",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "used",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "strictly",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "for",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "academic",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "purposes.",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "This",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "form",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "is",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "anonymous.",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Do",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "not",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "include",
+          "confidence": 93.0
+        },
+        {
+          "page": 0,
+          "text": "identifving",
+          "confidence": 91.0
+        },
+        {
+          "page": 0,
+          "text": "information",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "unless",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "requested.",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "Full",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Name:",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Ena",
+          "confidence": 44.0
+        },
+        {
+          "page": 0,
+          "text": "A",
+          "confidence": 76.0
+        },
+        {
+          "page": 0,
+          "text": "|",
+          "confidence": 34.0
+        },
+        {
+          "page": 0,
+          "text": "a",
+          "confidence": 3.0
+        },
+        {
+          "page": 0,
+          "text": "Registration",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "ID:",
+          "confidence": 92.0
+        },
+        {
+          "page": 0,
+          "text": "QQOOO",
+          "confidence": 63.0
+        },
+        {
+          "page": 0,
+          "text": "©",
+          "confidence": 94.0
+        },
+        {
+          "page": 0,
+          "text": "\\",
+          "confidence": 90.0
+        },
+        {
+          "page": 0,
+          "text": "ce",
+          "confidence": 0.0
+        },
+        {
+          "page": 0,
+          "text": "Gender:",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "()",
+          "confidence": 25.0
+        },
+        {
+          "page": 0,
+          "text": "Male",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "(",
+          "confidence": 74.0
+        },
+        {
+          "page": 0,
+          "text": ")",
+          "confidence": 74.0
+        },
+        {
+          "page": 0,
+          "text": "Female",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Blood",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Group:",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "(4A",
+          "confidence": 61.0
+        },
+        {
+          "page": 0,
+          "text": "(",
+          "confidence": 86.0
+        },
+        {
+          "page": 0,
+          "text": ")B",
+          "confidence": 86.0
+        },
+        {
+          "page": 0,
+          "text": "(",
+          "confidence": 83.0
+        },
+        {
+          "page": 0,
+          "text": ")",
+          "confidence": 83.0
+        },
+        {
+          "page": 0,
+          "text": "AB",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "(",
+          "confidence": 79.0
+        },
+        {
+          "page": 0,
+          "text": ")O",
+          "confidence": 79.0
+        },
+        {
+          "page": 0,
+          "text": "Do",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "you",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "have",
+          "confidence": 94.0
+        },
+        {
+          "page": 0,
+          "text": "any",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "of",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "the",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "following",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "conditions?",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "[",
+          "confidence": 70.0
+        },
+        {
+          "page": 0,
+          "text": "]",
+          "confidence": 37.0
+        },
+        {
+          "page": 0,
+          "text": "Asthma",
+          "confidence": 37.0
+        },
+        {
+          "page": 0,
+          "text": "[",
+          "confidence": 77.0
+        },
+        {
+          "page": 0,
+          "text": "]",
+          "confidence": 83.0
+        },
+        {
+          "page": 0,
+          "text": "Diabetes",
+          "confidence": 92.0
+        },
+        {
+          "page": 0,
+          "text": "[",
+          "confidence": 74.0
+        },
+        {
+          "page": 0,
+          "text": "]",
+          "confidence": 74.0
+        },
+        {
+          "page": 0,
+          "text": "Hypertension",
+          "confidence": 94.0
+        },
+        {
+          "page": 0,
+          "text": "[",
+          "confidence": 67.0
+        },
+        {
+          "page": 0,
+          "text": "]",
+          "confidence": 85.0
+        },
+        {
+          "page": 0,
+          "text": "Heart",
+          "confidence": 94.0
+        },
+        {
+          "page": 0,
+          "text": "Condition",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "[",
+          "confidence": 89.0
+        },
+        {
+          "page": 0,
+          "text": "-J",
+          "confidence": 46.0
+        },
+        {
+          "page": 0,
+          "text": "None",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "-",
+          "confidence": 0.0
+        },
+        {
+          "page": 0,
+          "text": "Weight",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "(kg):",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "|",
+          "confidence": 36.0
+        },
+        {
+          "page": 0,
+          "text": "b",
+          "confidence": 78.0
+        },
+        {
+          "page": 0,
+          "text": "4",
+          "confidence": 45.0
+        },
+        {
+          "page": 0,
+          "text": "(>",
+          "confidence": 16.0
+        },
+        {
+          "page": 0,
+          "text": "ee",
+          "confidence": 22.0
+        },
+        {
+          "page": 0,
+          "text": "en",
+          "confidence": 14.0
+        },
+        {
+          "page": 0,
+          "text": "Recent",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "Test",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Results",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "A",
+          "confidence": 7.0
+        },
+        {
+          "page": 0,
+          "text": "2",
+          "confidence": 14.0
+        },
+        {
+          "page": 0,
+          "text": "PY",
+          "confidence": 25.0
+        },
+        {
+          "page": 0,
+          "text": "OA,",
+          "confidence": 22.0
+        },
+        {
+          "page": 0,
+          "text": "|",
+          "confidence": 83.0
+        },
+        {
+          "page": 0,
+          "text": "Blood",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "Pressure",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "(26",
+          "confidence": 49.0
+        },
+        {
+          "page": 0,
+          "text": "|",
+          "confidence": 87.0
+        },
+        {
+          "page": 0,
+          "text": "6&4",
+          "confidence": 86.0
+        },
+        {
+          "page": 0,
+          "text": "mm*t",
+          "confidence": 53.0
+        },
+        {
+          "page": 0,
+          "text": "Blood",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "Sugar",
+          "confidence": 96.0
+        },
+        {
+          "page": 0,
+          "text": "(OO",
+          "confidence": 55.0
+        },
+        {
+          "page": 0,
+          "text": "AIG",
+          "confidence": 9.0
+        },
+        {
+          "page": 0,
+          "text": "L",
+          "confidence": 72.0
+        },
+        {
+          "page": 0,
+          "text": "«",
+          "confidence": 65.0
+        },
+        {
+          "page": 0,
+          "text": "~~",
+          "confidence": 42.0
+        },
+        {
+          "page": 0,
+          "text": "%",
+          "confidence": 61.0
+        },
+        {
+          "page": 0,
+          "text": "_",
+          "confidence": 52.0
+        },
+        {
+          "page": 0,
+          "text": "|",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "Temperature",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "Doctor’s",
+          "confidence": 0.0
+        },
+        {
+          "page": 0,
+          "text": "Remark:",
+          "confidence": 95.0
+        },
+        {
+          "page": 0,
+          "text": "<i",
+          "confidence": 8.0
+        },
+        {
+          "page": 0,
+          "text": "Doctor's",
+          "confidence": 7.0
+        },
+        {
+          "page": 0,
+          "text": "Signature:",
+          "confidence": 94.0
+        },
+        {
+          "page": 0,
+          "text": "Date:QS",
+          "confidence": 19.0
+        },
+        {
+          "page": 0,
+          "text": "/OL",
+          "confidence": 57.0
+        },
+        {
+          "page": 0,
+          "text": "/",
+          "confidence": 35.0
+        }
+      ]
+    },
+    "easyocr": {
+      "status": "ok",
+      "line_count": 60,
+      "average_confidence": 0.7126,
+      "lines": [
+        {
+          "page": 0,
+          "text": "MEDICAL SCREENING AND DECLARATION FORM",
+          "confidence": 0.8697460904082409
+        },
+        {
+          "page": 0,
+          "text": "Please complete all sections in BLOCK LETTERS and tick",
+          "confidence": 0.9282711025417039
+        },
+        {
+          "page": 0,
+          "text": "where",
+          "confidence": 0.9998872443379239
+        },
+        {
+          "page": 0,
+          "text": "applicable. Participation is voluntary and",
+          "confidence": 0.8827975344654025
+        },
+        {
+          "page": 0,
+          "text": "responses will be treated as",
+          "confidence": 0.7429025716872459
+        },
+        {
+          "page": 0,
+          "text": "confidential and",
+          "confidence": 0.9356966251028934
+        },
+        {
+          "page": 0,
+          "text": "strictly for academic purposes  This form is anonymous",
+          "confidence": 0.6391017513643942
+        },
+        {
+          "page": 0,
+          "text": "Do not",
+          "confidence": 0.8370084407003351
+        },
+        {
+          "page": 0,
+          "text": "include identifying information unless requested",
+          "confidence": 0.8103317608925343
+        },
+        {
+          "page": 0,
+          "text": "Full Name:",
+          "confidence": 0.8105956304708438
+        },
+        {
+          "page": 0,
+          "text": "Iozsm",
+          "confidence": 0.09324110695545328
+        },
+        {
+          "page": 0,
+          "text": "otAAN",
+          "confidence": 0.34892385095962747
+        },
+        {
+          "page": 0,
+          "text": "lAMs,",
+          "confidence": 0.31619546686368727
+        },
+        {
+          "page": 0,
+          "text": "Registration ID: OOQQQO_",
+          "confidence": 0.673299057582862
+        },
+        {
+          "page": 0,
+          "text": "Gender:",
+          "confidence": 0.6763119446818476
+        },
+        {
+          "page": 0,
+          "text": "Male",
+          "confidence": 0.9781931554861593
+        },
+        {
+          "page": 0,
+          "text": ") Female",
+          "confidence": 0.8250644948369165
+        },
+        {
+          "page": 0,
+          "text": "Blood Group:",
+          "confidence": 0.9995428903129924
+        },
+        {
+          "page": 0,
+          "text": "(2A",
+          "confidence": 0.2088344096598103
+        },
+        {
+          "page": 0,
+          "text": ") B",
+          "confidence": 0.7862752236650027
+        },
+        {
+          "page": 0,
+          "text": "AB",
+          "confidence": 0.9998309110311461
+        },
+        {
+          "page": 0,
+          "text": ") 0",
+          "confidence": 0.8665332794189453
+        },
+        {
+          "page": 0,
+          "text": "Do you have any of the following conditions?",
+          "confidence": 0.8981136136884247
+        },
+        {
+          "page": 0,
+          "text": "Asthma",
+          "confidence": 0.9060560475342263
+        },
+        {
+          "page": 0,
+          "text": "] Diabetes",
+          "confidence": 0.9821153941317977
+        },
+        {
+          "page": 0,
+          "text": "Hypertension",
+          "confidence": 0.9998265831061135
+        },
+        {
+          "page": 0,
+          "text": "Heart Condition",
+          "confidence": 0.9424839489100714
+        },
+        {
+          "page": 0,
+          "text": "None",
+          "confidence": 0.999991238117218
+        },
+        {
+          "page": 0,
+          "text": "Height (cm):",
+          "confidence": 0.9118412454034194
+        },
+        {
+          "page": 0,
+          "text": "12c",
+          "confidence": 0.8548498685678094
+        },
+        {
+          "page": 0,
+          "text": "[2Ei",
+          "confidence": 0.674872636795044
+        },
+        {
+          "page": 0,
+          "text": "Weight (kg):",
+          "confidence": 0.9831172734662363
+        },
+        {
+          "page": 0,
+          "text": "61kG",
+          "confidence": 0.31106647849082947
+        },
+        {
+          "page": 0,
+          "text": "Recent Test Results",
+          "confidence": 0.9998255071289854
+        },
+        {
+          "page": 0,
+          "text": "Test Name",
+          "confidence": 0.984875366993752
+        },
+        {
+          "page": 0,
+          "text": "Result",
+          "confidence": 0.9999969339786576
+        },
+        {
+          "page": 0,
+          "text": "Status(Normal/High/Low",
+          "confidence": 0.945168494373423
+        },
+        {
+          "page": 0,
+          "text": "Blood Pressure",
+          "confidence": 0.9998431043109516
+        },
+        {
+          "page": 0,
+          "text": "L26_",
+          "confidence": 0.8078102469444275
+        },
+        {
+          "page": 0,
+          "text": "84",
+          "confidence": 0.9991275031729564
+        },
+        {
+          "page": 0,
+          "text": "Normal",
+          "confidence": 0.7164692278448977
+        },
+        {
+          "page": 0,
+          "text": "Blood Sugar_",
+          "confidence": 0.6568200511797864
+        },
+        {
+          "page": 0,
+          "text": "LOQOJJL",
+          "confidence": 0.09953178756389705
+        },
+        {
+          "page": 0,
+          "text": "Normac",
+          "confidence": 0.11747935533468756
+        },
+        {
+          "page": 0,
+          "text": "Temperature",
+          "confidence": 0.9666597985350438
+        },
+        {
+          "page": 0,
+          "text": "36",
+          "confidence": 0.9998268651364817
+        },
+        {
+          "page": 0,
+          "text": "NaemAL",
+          "confidence": 0.4002935022391905
+        },
+        {
+          "page": 0,
+          "text": "Joctor' s Remark:",
+          "confidence": 0.7078955385118801
+        },
+        {
+          "page": 0,
+          "text": "hm40",
+          "confidence": 0.14359618723392487
+        },
+        {
+          "page": 0,
+          "text": "HEALPHY",
+          "confidence": 0.27480632478485556
+        },
+        {
+          "page": 0,
+          "text": "AnD",
+          "confidence": 0.5822317797252249
+        },
+        {
+          "page": 0,
+          "text": "HA<",
+          "confidence": 0.9173143996226196
+        },
+        {
+          "page": 0,
+          "text": "NO",
+          "confidence": 0.2603642509044674
+        },
+        {
+          "page": 0,
+          "text": "AUTORY",
+          "confidence": 0.3556412621268286
+        },
+        {
+          "page": 0,
+          "text": "OFLLLN6",
+          "confidence": 0.19051952119105642
+        },
+        {
+          "page": 0,
+          "text": "Doctor' s Signature:",
+          "confidence": 0.5871804071164549
+        },
+        {
+          "page": 0,
+          "text": "Date: 25",
+          "confidence": 0.5898846445535904
+        },
+        {
+          "page": 0,
+          "text": "0/206",
+          "confidence": 0.588537756690318
+        },
+        {
+          "page": 0,
+          "text": "used",
+          "confidence": 0.9304525220531751
+        },
+        {
+          "page": 0,
+          "text": "nlg",
+          "confidence": 0.24187724553357157
+        }
+      ]
+    }
+  },
+  "generated_at": "2026-03-19T16:46:42.960032+00:00"
+}
