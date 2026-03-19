@@ -52,3 +52,32 @@ The JSON output includes:
 - coherent reconstructed lines (`coherent_lines`)
 - detected field-value pairs (`fields`)
 - average confidence per engine (when available)
+
+## Ensemble voting (non-LLM)
+
+You can combine multiple engines and compute a deterministic field-level voted result
+while keeping engine statistics/confidence metadata:
+
+```bash
+python main.py /path/to/file.tiff --engines tesseract easyocr trocr --ensemble --output report.json
+```
+
+This adds an `ensemble` engine section with:
+
+- `fields` (voted field/value mapping)
+- `field_votes` (candidate values, vote counts, supporting engines)
+- `average_confidence` (aggregate confidence from supporting engines when available)
+
+## HTML field visualizer
+
+To avoid manually reading large JSON files, generate a simple HTML report:
+
+```bash
+python main.py /path/to/file.tiff --engines tesseract easyocr --ensemble --output report.json --html-output report.html
+```
+
+Open `report.html` in a browser to view:
+
+- ensemble voted field/value mapping
+- per-engine status and confidence
+- per-engine extracted fields in a table

@@ -6,9 +6,11 @@ from main import (
     OCRLine,
     _average_confidence,
     _build_coherent_output,
+    _build_ensemble_payload,
     _parse_easyocr_result,
     _parse_paddle_result,
     _parse_tesseract_data,
+    _render_html_report,
 )
 
 
@@ -124,6 +126,91 @@ class OCRParsingTests(unittest.TestCase):
         self.assertEqual(result["status"], "ok")
         self.assertEqual(result["coherent_lines"], ["Name: Alice Smith"])
         self.assertEqual(result["fields"], {"Name": "Alice Smith"})
+
+    def test_build_ensemble_payload_votes_by_field_value(self) -> None:
+        results = {
+            "tesseract": {
+                "status": "ok",
+                "average_confidence": 90.0,
+                "fields": {"Semester": "ALPHA", "Session": "2025/2026"},
+            },
+            "easyocr": {
+                "status": "ok",
+                "average_confidence": 80.0,
+                "fields": {"Semester": "ALPHA", "Session": "2025/2026"},
+            },
+            "trocr": {
+                "status": "ok",
+                "average_confidence": None,
+                "fields": {"Semester": "AIPHA", "Session": "2025-2026"},
+            },
+        }
+        ensemble = _build_ensemble_payload(results, ["tesseract", "easyocr", "trocr"])
+        self.assertEqual(ensemble["status"], "ok")
+        self.assertEqual(
+            ensemble["fields"],
+            {"Semester": "ALPHA", "Session": "2025/2026"},
+        )
+        self.assertEqual(ensemble["source_engines"], ["tesseract", "easyocr", "trocr"])
+        self.assertIn("field_votes", ensemble)
+
+    def test_run_ocr_adds_ensemble_when_requested(self) -> None:
+        def _tesseract(_pages: object) -> dict[str, object]:
+            return {
+                "status": "ok",
+                "average_confidence": 90.0,
+                "fields": {"Semester": "ALPHA"},
+                "coherent_lines": ["Semester: ALPHA"],
+                "line_count": 1,
+                "lines": [],
+            }
+
+        def _easyocr(_pages: object) -> dict[str, object]:
+            return {
+                "status": "ok",
+                "average_confidence": 70.0,
+                "fields": {"Semester": "ALPHA"},
+                "coherent_lines": ["Semester: ALPHA"],
+                "line_count": 1,
+                "lines": [],
+            }
+
+        with (
+            patch("main.os.path.exists", return_value=True),
+            patch("main._open_tiff_pages", return_value=["fake-page"]),
+            patch.dict(
+                main.ENGINE_RUNNERS,
+                {"tesseract": _tesseract, "easyocr": _easyocr},
+                clear=False,
+            ),
+        ):
+            payload = main.run_ocr(
+                "/tmp/input.tiff",
+                ["tesseract", "easyocr"],
+                include_ensemble=True,
+            )
+        self.assertIn("ensemble", payload["engines"])
+        self.assertEqual(payload["engines"]["ensemble"]["status"], "ok")
+        self.assertEqual(payload["engines"]["ensemble"]["fields"], {"Semester": "ALPHA"})
+
+    def test_render_html_report_contains_field_table(self) -> None:
+        payload = {
+            "file": "/tmp/input.tiff",
+            "page_count": 1,
+            "generated_at": "2026-01-01T00:00:00+00:00",
+            "engines": {
+                "ensemble": {"status": "ok", "fields": {"Session": "2025/2026"}},
+                "tesseract": {
+                    "status": "ok",
+                    "average_confidence": 88.0,
+                    "fields": {"Session": "2025/2026"},
+                },
+            },
+        }
+        report = _render_html_report(payload)
+        self.assertIn("OCR Field Visualizer", report)
+        self.assertIn("Session", report)
+        self.assertIn("2025/2026", report)
 
     def test_parse_paddle_result_extracts_text_and_confidence(self) -> None:
         parsed = _parse_paddle_result(
