@@ -31,6 +31,31 @@ python -m pip install transformers torch
 > For TrOCR first run, model files are downloaded from Hugging Face. If offline, set
 > `TROCR_MODEL` to a local model directory that contains the processor/model files.
 
+## How to add TrOCR
+
+If you only want TrOCR support, do this:
+
+1. Install dependencies:
+
+   ```bash
+   python -m pip install pillow transformers torch
+   ```
+
+2. Run the CLI with the TrOCR engine:
+
+   ```bash
+   python main.py /path/to/file.tiff --engines trocr --output report.json
+   ```
+
+3. (Optional, offline/local model) point `TROCR_MODEL` to a local Hugging Face model directory:
+
+   ```bash
+   TROCR_MODEL=/path/to/local/trocr-model python main.py /path/to/file.tiff --engines trocr
+   ```
+
+If TrOCR model files are unavailable, the JSON output returns an error with a hint that explains
+how to enable download access or set `TROCR_MODEL`.
+
 ## Usage
 
 Run OCR on a TIFF/TIF file:

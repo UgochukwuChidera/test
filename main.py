@@ -537,7 +537,7 @@ def run_ocr(path: str, engines: list[str], *, include_ensemble: bool = False) ->
             if engine == "trocr":
                 hint = (
                     "TrOCR model files unavailable. Allow model download or set TROCR_MODEL "
-                    "to a local HuggingFace model directory."
+                    "to a local Hugging Face model directory."
                 )
             results[engine] = {
                 "status": "error",
