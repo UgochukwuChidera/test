@@ -53,6 +53,22 @@ class OCRParsingTests(unittest.TestCase):
             [(0, "MEDICAL SCREENING", 94.0), (0, "AND DECLARATION", 95.5)],
         )
 
+    def test_parse_tesseract_data_falls_back_when_line_metadata_is_invalid(self) -> None:
+        parsed = _parse_tesseract_data(
+            0,
+            {
+                "text": ["MEDICAL", "SCREENING"],
+                "conf": ["93", "95"],
+                "block_num": ["x", "x"],
+                "par_num": [1, 1],
+                "line_num": [1, 1],
+            },
+        )
+        self.assertEqual(
+            [(line.page, line.text, line.confidence) for line in parsed],
+            [(0, "MEDICAL", 93.0), (0, "SCREENING", 95.0)],
+        )
+
     def test_parse_paddle_result_extracts_text_and_confidence(self) -> None:
         parsed = _parse_paddle_result(
             0,

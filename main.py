@@ -64,6 +64,16 @@ def _parse_tesseract_data(page_index: int, data: dict[str, list[str]]) -> list[O
         and len(line_nums) == len(texts)
     )
 
+    line_keys: list[tuple[int, int, int]] = []
+    if has_line_metadata:
+        try:
+            line_keys = [
+                (int(block_nums[idx]), int(par_nums[idx]), int(line_nums[idx]))
+                for idx in range(len(texts))
+            ]
+        except (TypeError, ValueError):
+            has_line_metadata = False
+
     if not has_line_metadata:
         for idx, text in enumerate(texts):
             clean = _clean_text(text)
@@ -89,16 +99,17 @@ def _parse_tesseract_data(page_index: int, data: dict[str, list[str]]) -> list[O
         except (TypeError, ValueError):
             conf = None
 
-        key = (int(block_nums[idx]), int(par_nums[idx]), int(line_nums[idx]))
+        key = line_keys[idx]
         bucket = grouped.setdefault(
             key,
-            {"index": idx, "parts": [], "confidences": []},
+            {"parts": [], "confidences": []},
         )
         bucket["parts"].append(clean)
         if conf is not None:
             bucket["confidences"].append(conf)
 
-    for payload in sorted(grouped.values(), key=lambda item: item["index"]):
+    for key in sorted(grouped):
+        payload = grouped[key]
         line_text = " ".join(payload["parts"]).strip()
         if not line_text:
             continue
