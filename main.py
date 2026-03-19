@@ -22,6 +22,7 @@ from typing import Any
 
 SUPPORTED_ENGINES = ("tesseract", "paddleocr", "easyocr", "trocr")
 _MAX_FIELD_LABEL_LENGTH = 80
+_MAX_FIELD_CONTINUATION_LINES = 1
 _FIELD_LABEL_RE = re.compile(
     rf"^\s*([A-Za-z][A-Za-z0-9 /()'&\-.]{{0,{_MAX_FIELD_LABEL_LENGTH}}})\s*:\s*(.*)$"
 )
@@ -172,9 +173,10 @@ def _build_coherent_output(lines: list[OCRLine]) -> tuple[list[str], dict[str, s
     fields: dict[str, str] = {}
     pending_field_label: str | None = None
     pending_field_value = ""
+    pending_field_continuations = 0
 
     def flush_pending_field() -> None:
-        nonlocal pending_field_label, pending_field_value
+        nonlocal pending_field_label, pending_field_value, pending_field_continuations
         if pending_field_label is None:
             return
         normalized = " ".join(pending_field_value.split())
@@ -184,6 +186,7 @@ def _build_coherent_output(lines: list[OCRLine]) -> tuple[list[str], dict[str, s
         )
         pending_field_label = None
         pending_field_value = ""
+        pending_field_continuations = 0
 
     for line in lines:
         text = _clean_text(line.text)
@@ -197,11 +200,17 @@ def _build_coherent_output(lines: list[OCRLine]) -> tuple[list[str], dict[str, s
             pending_field_value = label_match.group(2).strip()
             continue
 
-        if pending_field_label is not None:
+        if (
+            pending_field_label is not None
+            and pending_field_continuations < _MAX_FIELD_CONTINUATION_LINES
+        ):
             pending_field_value = (
                 f"{pending_field_value} {text}".strip() if pending_field_value else text
             )
+            pending_field_continuations += 1
             continue
+        if pending_field_label is not None:
+            flush_pending_field()
 
         coherent_lines.append(text)
 

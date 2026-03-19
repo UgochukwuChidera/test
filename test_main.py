@@ -88,6 +88,23 @@ class OCRParsingTests(unittest.TestCase):
             {"Name": "Jane Doe", "Registration ID": "1234", "Gender": "Female"},
         )
 
+    def test_build_coherent_output_limits_field_spillover(self) -> None:
+        coherent_lines, fields = _build_coherent_output(
+            [
+                OCRLine(page=0, text="Mode of Study: Full-Time", confidence=95.0),
+                OCRLine(page=0, text="( ) Part-Time", confidence=95.0),
+                OCRLine(page=0, text="Course Registration", confidence=95.0),
+            ]
+        )
+        self.assertEqual(
+            coherent_lines,
+            [
+                "Mode of Study: Full-Time ( ) Part-Time",
+                "Course Registration",
+            ],
+        )
+        self.assertEqual(fields, {"Mode of Study": "Full-Time ( ) Part-Time"})
+
     def test_run_ocr_includes_coherent_lines_and_fields(self) -> None:
         fake_lines = [
             OCRLine(page=0, text="Name: Alice", confidence=98.0),
