@@ -23,6 +23,9 @@ from typing import Any
 SUPPORTED_ENGINES = ("tesseract", "paddleocr", "easyocr", "trocr")
 _MAX_FIELD_LABEL_LENGTH = 80
 _MAX_FIELD_CONTINUATION_LINES = 1
+_CONFIDENCE_PRECISION = 4
+# Field labels in these forms are short phrases like "Mode of Study" or
+# "Registration ID", followed by ":".
 _FIELD_LABEL_RE = re.compile(
     rf"^\s*([A-Za-z][A-Za-z0-9 /()'&\-.]{{0,{_MAX_FIELD_LABEL_LENGTH}}})\s*:\s*(.*)$"
 )
@@ -43,7 +46,7 @@ def _average_confidence(lines: list[OCRLine]) -> float | None:
     confidences = [line.confidence for line in lines if line.confidence is not None]
     if not confidences:
         return None
-    return round(sum(confidences) / len(confidences), 4)
+    return round(sum(confidences) / len(confidences), _CONFIDENCE_PRECISION)
 
 
 def _open_tiff_pages(path: str) -> list[Any]:
@@ -121,7 +124,9 @@ def _parse_tesseract_data(page_index: int, data: dict[str, list[str]]) -> list[O
             continue
         conf_values = payload["confidences"]
         line_conf = (
-            round(sum(conf_values) / len(conf_values), 4) if conf_values else None
+            round(sum(conf_values) / len(conf_values), _CONFIDENCE_PRECISION)
+            if conf_values
+            else None
         )
         lines.append(OCRLine(page=page_index, text=line_text, confidence=line_conf))
     return lines
@@ -204,6 +209,8 @@ def _build_coherent_output(lines: list[OCRLine]) -> tuple[list[str], dict[str, s
             pending_field_label is not None
             and pending_field_continuations < _MAX_FIELD_CONTINUATION_LINES
         ):
+            # Allow one continuation line to capture wrapped field values while
+            # avoiding spillover from unrelated following sections.
             pending_field_value = (
                 f"{pending_field_value} {text}".strip() if pending_field_value else text
             )
