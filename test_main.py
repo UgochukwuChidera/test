@@ -5,6 +5,7 @@ import main
 from main import (
     OCRLine,
     _average_confidence,
+    _build_coherent_output,
     _parse_easyocr_result,
     _parse_paddle_result,
     _parse_tesseract_data,
@@ -68,6 +69,44 @@ class OCRParsingTests(unittest.TestCase):
             [(line.page, line.text, line.confidence) for line in parsed],
             [(0, "MEDICAL", 93.0), (0, "SCREENING", 95.0)],
         )
+
+    def test_build_coherent_output_merges_field_values_across_lines(self) -> None:
+        coherent_lines, fields = _build_coherent_output(
+            [
+                OCRLine(page=0, text="Name: Jane", confidence=95.0),
+                OCRLine(page=0, text="Doe", confidence=95.0),
+                OCRLine(page=0, text="Registration ID: 1234", confidence=95.0),
+                OCRLine(page=0, text="Gender: Female", confidence=95.0),
+            ]
+        )
+        self.assertEqual(
+            coherent_lines,
+            ["Name: Jane Doe", "Registration ID: 1234", "Gender: Female"],
+        )
+        self.assertEqual(
+            fields,
+            {"Name": "Jane Doe", "Registration ID": "1234", "Gender": "Female"},
+        )
+
+    def test_run_ocr_includes_coherent_lines_and_fields(self) -> None:
+        fake_lines = [
+            OCRLine(page=0, text="Name: Alice", confidence=98.0),
+            OCRLine(page=0, text="Smith", confidence=98.0),
+        ]
+        with (
+            patch("main.os.path.exists", return_value=True),
+            patch("main._open_tiff_pages", return_value=["fake-page"]),
+            patch.dict(
+                main.ENGINE_RUNNERS,
+                {"tesseract": lambda _pages: main._build_engine_payload(fake_lines)},
+                clear=False,
+            ),
+        ):
+            payload = main.run_ocr("/tmp/input.tiff", ["tesseract"])
+        result = payload["engines"]["tesseract"]
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["coherent_lines"], ["Name: Alice Smith"])
+        self.assertEqual(result["fields"], {"Name": "Alice Smith"})
 
     def test_parse_paddle_result_extracts_text_and_confidence(self) -> None:
         parsed = _parse_paddle_result(

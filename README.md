@@ -49,4 +49,6 @@ The JSON output includes:
 - page count
 - per-engine status
 - extracted lines (`page`, `text`, `confidence`)
+- coherent reconstructed lines (`coherent_lines`)
+- detected field-value pairs (`fields`)
 - average confidence per engine (when available)

@@ -14,12 +14,14 @@ import argparse
 import functools
 import json
 import os
+import re
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 from typing import Any
 
 
 SUPPORTED_ENGINES = ("tesseract", "paddleocr", "easyocr", "trocr")
+_FIELD_LABEL_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9 /()'&\-.]{0,80})\s*:\s*(.*)$")
 
 
 @dataclass
@@ -162,6 +164,63 @@ def _parse_easyocr_result(page_index: int, result: Any) -> list[OCRLine]:
     return lines
 
 
+def _build_coherent_output(lines: list[OCRLine]) -> tuple[list[str], dict[str, str]]:
+    coherent_lines: list[str] = []
+    fields: dict[str, str] = {}
+    pending_field_label: str | None = None
+    pending_field_value = ""
+
+    def flush_pending_field() -> None:
+        nonlocal pending_field_label, pending_field_value
+        if pending_field_label is None:
+            return
+        normalized = " ".join(pending_field_value.split())
+        fields[pending_field_label] = normalized
+        coherent_lines.append(
+            f"{pending_field_label}: {normalized}" if normalized else f"{pending_field_label}:"
+        )
+        pending_field_label = None
+        pending_field_value = ""
+
+    for line in lines:
+        text = _clean_text(line.text)
+        if not text:
+            continue
+
+        label_match = _FIELD_LABEL_RE.match(text)
+        if label_match:
+            flush_pending_field()
+            pending_field_label = label_match.group(1).strip()
+            pending_field_value = label_match.group(2).strip()
+            continue
+
+        if pending_field_label is not None:
+            pending_field_value = (
+                f"{pending_field_value} {text}".strip() if pending_field_value else text
+            )
+            continue
+
+        coherent_lines.append(text)
+
+    flush_pending_field()
+    return coherent_lines, fields
+
+
+def _build_engine_payload(lines: list[OCRLine], *, note: str | None = None) -> dict[str, Any]:
+    coherent_lines, fields = _build_coherent_output(lines)
+    payload: dict[str, Any] = {
+        "status": "ok",
+        "line_count": len(lines),
+        "average_confidence": _average_confidence(lines),
+        "lines": [asdict(line) for line in lines],
+        "coherent_lines": coherent_lines,
+        "fields": fields,
+    }
+    if note:
+        payload["note"] = note
+    return payload
+
+
 def _run_tesseract(pages: list[Any]) -> dict[str, Any]:
     import pytesseract
     from pytesseract import Output
@@ -170,12 +229,7 @@ def _run_tesseract(pages: list[Any]) -> dict[str, Any]:
     for i, page in enumerate(pages):
         data = pytesseract.image_to_data(page, output_type=Output.DICT)
         lines.extend(_parse_tesseract_data(i, data))
-    return {
-        "status": "ok",
-        "line_count": len(lines),
-        "average_confidence": _average_confidence(lines),
-        "lines": [asdict(line) for line in lines],
-    }
+    return _build_engine_payload(lines)
 
 
 def _run_paddleocr(pages: list[Any]) -> dict[str, Any]:
@@ -186,12 +240,7 @@ def _run_paddleocr(pages: list[Any]) -> dict[str, Any]:
     for i, page in enumerate(pages):
         result = ocr.ocr(np.array(page), cls=True)
         lines.extend(_parse_paddle_result(i, result))
-    return {
-        "status": "ok",
-        "line_count": len(lines),
-        "average_confidence": _average_confidence(lines),
-        "lines": [asdict(line) for line in lines],
-    }
+    return _build_engine_payload(lines)
 
 
 def _run_easyocr(pages: list[Any]) -> dict[str, Any]:
@@ -202,12 +251,7 @@ def _run_easyocr(pages: list[Any]) -> dict[str, Any]:
     for i, page in enumerate(pages):
         result = reader.readtext(np.array(page))
         lines.extend(_parse_easyocr_result(i, result))
-    return {
-        "status": "ok",
-        "line_count": len(lines),
-        "average_confidence": _average_confidence(lines),
-        "lines": [asdict(line) for line in lines],
-    }
+    return _build_engine_payload(lines)
 
 
 def _run_trocr(pages: list[Any]) -> dict[str, Any]:
@@ -226,13 +270,10 @@ def _run_trocr(pages: list[Any]) -> dict[str, Any]:
             # TrOCR does not expose token-level confidence in this basic path.
             lines.append(OCRLine(page=i, text=text, confidence=None))
 
-    return {
-        "status": "ok",
-        "line_count": len(lines),
-        "average_confidence": _average_confidence(lines),
-        "lines": [asdict(line) for line in lines],
-        "note": "TrOCR confidence is not available in this minimal implementation.",
-    }
+    return _build_engine_payload(
+        lines,
+        note="TrOCR confidence is not available in this minimal implementation.",
+    )
 
 
 ENGINE_RUNNERS = {
