@@ -28,6 +28,33 @@ python -m pip install transformers torch
 ```
 
 > For Tesseract, you also need the system Tesseract binary installed on your machine.
+> For TrOCR first run, model files are downloaded from Hugging Face. If offline, set
+> `TROCR_MODEL` to a local model directory that contains the processor/model files.
+
+## How to add TrOCR
+
+If you only want TrOCR support, do this:
+
+1. Install dependencies:
+
+   ```bash
+   python -m pip install pillow transformers torch
+   ```
+
+2. Run the CLI with the TrOCR engine:
+
+   ```bash
+   python main.py /path/to/file.tiff --engines trocr --output report.json
+   ```
+
+3. (Optional, offline/local model) point `TROCR_MODEL` to a local Hugging Face model directory:
+
+   ```bash
+   TROCR_MODEL=/path/to/local/trocr-model python main.py /path/to/file.tiff --engines trocr
+   ```
+
+If TrOCR model files are unavailable, the JSON output returns an error with a hint that explains
+how to enable download access or set `TROCR_MODEL`.
 
 ## Usage
 
@@ -49,4 +76,35 @@ The JSON output includes:
 - page count
 - per-engine status
 - extracted lines (`page`, `text`, `confidence`)
+- coherent reconstructed lines (`coherent_lines`)
+- detected field-value pairs (`fields`)
 - average confidence per engine (when available)
+
+## Ensemble voting (non-LLM)
+
+You can combine multiple engines and compute a deterministic field-level voted result
+while keeping engine statistics/confidence metadata:
+
+```bash
+python main.py /path/to/file.tiff --engines tesseract easyocr trocr --ensemble --output report.json
+```
+
+This adds an `ensemble` engine section with:
+
+- `fields` (voted field/value mapping)
+- `field_votes` (candidate values, vote counts, supporting engines)
+- `average_confidence` (aggregate confidence from supporting engines when available)
+
+## HTML field visualizer
+
+To avoid manually reading large JSON files, generate a simple HTML report:
+
+```bash
+python main.py /path/to/file.tiff --engines tesseract easyocr --ensemble --output report.json --html-output report.html
+```
+
+Open `report.html` in a browser to view:
+
+- ensemble voted field/value mapping
+- per-engine status and confidence
+- per-engine extracted fields in a table
